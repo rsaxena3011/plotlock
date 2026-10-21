@@ -90,7 +90,7 @@ DATA.plots.forEach((p) => {
       L.marker([d.latitude, d.longitude], {
         icon: L.divIcon({ className: "", html: '<div class="fire-marker">!</div>', iconSize: [20, 20], iconAnchor: [10, 10] }),
       }).bindTooltip(
-        `FIRMS/VIIRS detection — ${esc(d.acq_date || "")} ${esc(d.acq_time || "")} UTC, ` +
+        `FIRMS/VIIRS detection: ${esc(d.acq_date || "")} ${esc(d.acq_time || "")} UTC, ` +
         `confidence ${esc(d.confidence || "")}, FRP ${esc(d.frp != null ? d.frp : "?")} MW`
       ).addTo(map);
     });
@@ -145,7 +145,7 @@ function metricsTable(p) {
     rowsHtml += row("Sentinel-2 NBR, pre (" + esc(s2.pre_date || "") + ")", esc(s2.nbr_pre));
     rowsHtml += row("Sentinel-2 NBR, post (" + esc(s2.post_date || "") + ")", esc(s2.nbr_post));
     rowsHtml += row("Mean dNBR (scar signal)", esc(signed(s2.dnbr_mean)) +
-      (s2.dnbr_mean >= 0.10 ? " — at/above the 0.10 scar threshold" : " — below the 0.10 scar threshold"));
+      (s2.dnbr_mean >= 0.10 ? ", at/above the 0.10 scar threshold" : ", below the 0.10 scar threshold"));
     rowsHtml += row("Pixels with dNBR ≥ 0.15", pct(s2.burned_pixel_fraction) +
       " of plot pixels (scar-positive at ≥ 25%)");
     rowsHtml += row("Sentinel-2 pre item", mono(s2.pre_item));
@@ -195,7 +195,7 @@ function onchainSection(p) {
   return `<h3>On-chain record</h3>
     <div class="ok-box"><strong>Attested on-chain.</strong> The oracle signed this plot's NoBurn
     verdict and the contract recorded the attestation. Anyone can replay it from the links
-    below — no wallet or API key needed.</div>
+    below, no wallet or API key needed.</div>
     <table class="kv">${rowsHtml}</table>`;
 }
 
@@ -203,7 +203,7 @@ function duplicateSection(p) {
   if (p.bundle_id !== "plot-4-duplicate") return "";
   const r = OC.duplicate_rejection;
   const rowsHtml =
-    row("Base plot", esc("Plot 1 — clean paddy field")) +
+    row("Base plot", esc("Plot 1 - clean paddy field")) +
     row("Outline shift", `~${esc(p.shift_m_approx.east)} m east, ~${esc(p.shift_m_approx.north)} m north`) +
     row("H3 cells in redrawn outline", esc(p.h3_cell_count)) +
     row("Cells already registered to plot 1", `<strong>${esc(p.overlapping_cell_count)}</strong>`) +
@@ -211,7 +211,7 @@ function duplicateSection(p) {
   return `<h3>The duplicate attempt</h3>
     <table class="kv">${rowsHtml}</table>
     <div class="revert-box">Registration <strong>reverts</strong> with
-    <span class="mono">${esc(r.error)}(${esc(r.season)}, ${esc(r.cell)})</span> — the redrawn outline
+    <span class="mono">${esc(r.error)}(${esc(r.season)}, ${esc(r.cell)})</span>, the redrawn outline
     still covers H3 cells that plot 1 registered for season ${esc(r.season)}, so the same land
     cannot be registered, or claimed, a second time.</div>`;
 }
@@ -241,7 +241,7 @@ async function tamperSectionHtml(p) {
     <div class="hash-line"><span>Recorded demo hash</span><span class="mono">${esc(shortHash(recordedDemoHash))}</span></div>
     <div class="hash-line"><span>Recomputed now</span><span class="mono">${esc(shortHash(recomputed))}</span></div>
     <div class="hash-line"><span>Status</span>
-      <span class="hash-status ${match ? "hash-ok" : "hash-bad"}">${match ? "MATCH — evidence untouched" : "MISMATCH — tamper detected"}</span></div>
+      <span class="hash-status ${match ? "hash-ok" : "hash-bad"}">${match ? "MATCH: evidence untouched" : "MISMATCH: tamper detected"}</span></div>
     <div class="tamper-controls">
       <button class="btn" id="btn-tamper" ${match ? "" : "disabled"}>Tamper: set mean dNBR to 0.240 (a burned value)</button>
       <button class="btn secondary" id="btn-reset" ${match ? "disabled" : ""}>Reset evidence</button>
@@ -254,7 +254,7 @@ async function renderPanel(p) {
     ? `<span class="chip chip-chain">Attested on-chain · Polygon Amoy</span>` : "";
   const outcome = isDup
     ? `<div class="revert-box">This registration can never succeed while plot 1 holds these
-       cells for season ${esc(p.plot.season)} — that rejection is the product.</div>`
+       cells for season ${esc(p.plot.season)}, that rejection is the product.</div>`
     : p.expected_verdict === "NoBurn"
       ? `<div class="ok-box">Both signals present and clean, so this is the one verdict that
          records a payout-eligible attestation.</div>`
@@ -262,7 +262,7 @@ async function renderPanel(p) {
         ? `<div class="revert-box">Both signals confirm a burn, so no attestation and no
            payout is recorded for this plot.</div>`
         : `<div class="revert-box" style="background:#fdf6e3;border-color:#ecd9a0">A required
-           signal is unavailable, so the verdict is Uncertain — and Uncertain never pays.</div>`;
+           signal is unavailable, so the verdict is Uncertain, and Uncertain never pays.</div>`;
 
   panel.innerHTML = `
     <h2>${esc(p.plot.label)}</h2>

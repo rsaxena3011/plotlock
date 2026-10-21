@@ -1,0 +1,22 @@
+{
+  "name": "plotlock",
+  "version": "0.1.0",
+  "description": "PlotLock - one on-chain attestation per plot per season, bound to satellite evidence",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.6.1",
+    "dotenv": "^18.0.8",
+    "ethers": "^6.17.0",
+    "hardhat": "^2.29.1"
+  }
+}

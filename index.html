@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlotLock: one attestation per plot per season, bound to satellite evidence</title>
+<meta name="description" content="PlotLock demo: four Kaithal, Haryana plots, two-satellite evidence, oracle-signed verdicts and an H3 cell registry on Polygon Amoy testnet, so the same land can never be claimed twice.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">PL</div>
+      <div>
+        <h1>PlotLock</h1>
+        <p class="tagline">One on-chain attestation per plot per season, bound to satellite evidence, so the same land can never be claimed twice.</p>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-net">Polygon Amoy testnet</span>
+      <span class="badge badge-track">IEEE ClimateChain · Track 4: Climate Data &amp; Environmental Monitoring</span>
+      <span class="badge badge-demo">Demo data: baked fixtures, honestly labelled</span>
+    </div>
+  </div>
+</header>
+
+<section class="impact" aria-label="How PlotLock counts impact">
+  <div class="wrap impact-grid">
+    <div class="impact-card">
+      <h2>Impact math counts CH<sub>4</sub> + N<sub>2</sub>O as CO<sub>2</sub>e</h2>
+      <p>Burning one field of paddy straw releases methane (CH<sub>4</sub>) and nitrous oxide
+      (N<sub>2</sub>O). Counted as CO<sub>2</sub>-equivalent, those two gases are the climate
+      footprint of a burn that a prevented-burn attestation actually avoids.</p>
+    </div>
+    <div class="impact-card">
+      <h2>Straw CO<sub>2</sub> itself is <em>not</em> counted</h2>
+      <p>The CO<sub>2</sub> in the straw is biogenic and short-cycle, the next crop reabsorbs it,
+      so IPCC accounting excludes it. Counting it would inflate every claim; PlotLock
+      follows the IPCC rule instead.</p>
+    </div>
+    <div class="impact-card">
+      <h2>Plus PM2.5, the harm you can breathe</h2>
+      <p>Stubble smoke is a major seasonal source of fine particulate matter (PM2.5) over
+      northern India. It is reported alongside the gases, as a health impact, not folded
+      into the CO<sub>2</sub>e number. All impact figures are labelled projections, no
+      market statistics are invented.</p>
+    </div>
+  </div>
+</section>
+
+<main class="wrap layout">
+  <section class="map-column">
+    <div class="map-toolbar">
+      <h2>Demo plots: Kaithal, Haryana</h2>
+      <div class="legend" aria-label="Verdict legend">
+        <span><i class="sw sw-clean"></i> NoBurn</span>
+        <span><i class="sw sw-burned"></i> Burned</span>
+        <span><i class="sw sw-uncertain"></i> Uncertain</span>
+        <span><i class="sw sw-duplicate"></i> Duplicate (rejected)</span>
+        <span><i class="sw sw-fire"></i> FIRMS detection</span>
+      </div>
+    </div>
+    <div id="map" role="application" aria-label="Map of the four PlotLock demo plots near Kaithal, Haryana"></div>
+    <div id="plot-cards" class="plot-cards" aria-label="Plot shortcuts"></div>
+    <p class="rule-strip"><strong>The verdict rule:</strong> two signals, both required:
+    a FIRMS/VIIRS active-fire detection inside the plot (confidence n/h) <em>and</em> a
+    Sentinel-2 burn scar (mean dNBR ≥ 0.10, or ≥ 25% of pixels ≥ 0.15, USGS scale).
+    Both clean → <strong>NoBurn</strong>. Both positive → <strong>Burned</strong>. A signal missing
+    or the two disagreeing → <strong>Uncertain</strong>. Only NoBurn records a payout-eligible
+    attestation; Uncertain never pays.</p>
+  </section>
+
+  <aside id="panel" class="panel" aria-live="polite">
+    <p class="panel-hint">Select a plot on the map (or a card below it) to inspect its evidence bundle, verdict and on-chain record.</p>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>Honesty notes.</strong> Sentinel-2 item IDs, dates and cloud cover are real
+    (Microsoft Planetary Computer STAC, tile T43RFP, Oct–Nov 2025). Plot 1 and plot 3 are
+    fully measured. Plot 2 is <strong>partly mirrored</strong>: its item metadata and pre-fire NBR are
+    real, but the post-fire scar metrics and FIRMS rows are mirrored to a typical
+    low-severity stubble burn, because the real Oct–Nov 2025 analysis found no field with a
+    persistent scar in the demo area and a live FIRMS pull needs a NASA MAP_KEY this project
+    does not hold. Nothing mirrored is passed off as measured. No-detection is not proof of
+    no-burn: FIRMS can miss short fires between overpasses, which is why both signals must
+    agree before anything is attested.</p>
+    <p><strong>Chain:</strong> everything on-chain happened on the <strong>Polygon Amoy testnet</strong>
+    (chainId 80002) with throwaway wallets and test POL, no real funds, no mainnet.
+    Contract source verification on PolygonScan is pending a free API key; the bytecode and
+    all state are fully inspectable on the explorer.</p>
+    <p><strong>Run this page:</strong> from the repository root run
+    <code>python3 -m http.server 8000</code> and open
+    <code>http://localhost:8000/web/</code>. Map tiles and the Leaflet library load from
+    public CDNs (Esri World Imagery / OpenStreetMap); everything else is static and local.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

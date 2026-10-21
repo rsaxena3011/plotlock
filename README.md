@@ -36,11 +36,14 @@ PlotLock supports evidence review; it does not certify carbon credits.
 - `contracts/PlotLock.sol` — the registry and attestation contract
   (Solidity, OpenZeppelin `Ownable` / `ECDSA` / `MessageHashUtils`).
   Deployed on **Polygon Amoy testnet**.
-- **Oracle (off-chain, in progress)** — FastAPI service that evaluates
+- **Oracle (off-chain)** — FastAPI service (`oracle/`) that evaluates
   FIRMS/VIIRS + Sentinel-2 evidence (fixture set baked in so the demo never
-  depends on a live API), classifies burned / no-burn / uncertain with a
-  confidence score, and signs verdicts with a server-side key. Keys never
-  reach the browser.
+  depends on a live API; Sentinel-2 item data and the clean/cloudy analyses
+  are real Planetary Computer measurements, the burned plot's scar/FIRMS
+  rows are labelled as mirrored - see `oracle/README.md`), applies the
+  two-signal verdict rule (both signals must agree; missing or conflicting
+  evidence is `Uncertain` and never pays), and signs verdicts with a
+  server-side key. Keys never reach the browser.
 - **Map UI (in progress)** — one Leaflet page showing the demo plots,
   verdicts, and block-explorer links so anyone can replay the story on-chain
   with no wallet and no API key.
@@ -50,8 +53,9 @@ PlotLock supports evidence review; it does not certify carbon credits.
 The contract is live on Polygon Amoy (see Deployment status below). Open
 the contract on the explorer:
 https://amoy.polygonscan.com/address/0x0a9B8e718D2cF31cc2ED454045C0151C81A2E2E9
-— the step-by-step replay of the four demo plots lands here as the oracle
-and UI come online (days 2–3).
+— the step-by-step replay of the four demo plots lands here as the map
+UI comes online (day 3); the oracle and its fixture evidence set are
+already live in `oracle/`.
 
 ## Deployment status — DEPLOYED to Polygon Amoy (2026-10-21)
 
@@ -82,7 +86,9 @@ state are fully inspectable on the explorer in the meantime.
 
 ```bash
 npm install
-npx hardhat test        # full suite: every revert path is tested
+npx hardhat test        # contract suite + Python-oracle signature round trip
+oracle/.venv/bin/pip install -r oracle/requirements.txt
+oracle/.venv/bin/python -m pytest oracle/tests -q   # oracle suite
 npx hardhat run scripts/deploy.js --network amoy   # needs a funded .env
 ```
 

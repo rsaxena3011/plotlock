@@ -44,9 +44,9 @@ PlotLock supports evidence review; it does not certify carbon credits.
   two-signal verdict rule (both signals must agree; missing or conflicting
   evidence is `Uncertain` and never pays), and signs verdicts with a
   server-side key. Keys never reach the browser.
-- **Map UI (in progress)** — one Leaflet page showing the demo plots,
-  verdicts, and block-explorer links so anyone can replay the story on-chain
-  with no wallet and no API key.
+- **Map UI (`web/`)** — one Leaflet page showing the four demo plots,
+  verdicts, evidence panels and block-explorer links so anyone can replay
+  the story on-chain with no wallet and no API key.
 
 ## How to replay on testnet
 
@@ -85,9 +85,33 @@ On-chain read-back after step 4 (`hasAttestation(1, 2026)` is true):
 plotId 1, season 2026, evidenceHash
 `0xdfd977ee33546023db59ed8a918e83a269ce5d39cf4d3021959b497eb0636e1f`,
 oracle `0x392595bb13Bb4E5696709bd2d6ED6d59AbC94b17`, timestamp 1792557120.
-The replay of the remaining demo plots lands here as the map UI comes
-online; the oracle and its fixture evidence set are already live in
-`oracle/`.
+The remaining demo plots (burned, cloudy, duplicate) are fixture-side:
+their evidence, verdicts and the duplicate rejection are presented in
+the map UI (`web/`), which reads the same fixture bundles the oracle
+evaluates.
+
+## Map UI
+
+`web/` is a dependency-light static page (plain HTML/CSS/JS + Leaflet from
+a CDN, no build step): the four demo plots on one map over Kaithal,
+Haryana, coloured by verdict, each opening an evidence panel with the
+fixture's FIRMS/Sentinel-2 metrics, its provenance label (real vs partly
+mirrored), and — for plot 1 — the live on-chain record with explorer
+links. Plot 4's panel shows the `CellAlreadyTaken` duplicate rejection,
+and plot 1's panel carries a tamper-evidence demo: mutate the evidence
+and the recomputed bundle hash stops matching, the browser-side
+equivalent of the oracle's `/verify` check.
+
+Run it from the repository root:
+
+```bash
+python3 -m http.server 8000
+# open http://localhost:8000/web/
+```
+
+`web/data.js` is generated from `oracle/fixtures/*.json` — every metric
+on the page is read from the fixture files; regenerate it instead of
+hand-editing numbers.
 
 ## Deployment status — DEPLOYED to Polygon Amoy (2026-10-21)
 

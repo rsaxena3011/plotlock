@@ -8,3 +8,7 @@ coverage/
 coverage.json
 typechain/
 typechain-types/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

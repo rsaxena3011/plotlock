@@ -50,6 +50,24 @@ PlotLock supports evidence review; it does not certify carbon credits.
 _(Placeholder — contract address, explorer links, and the step-by-step
 replay of the four demo plots land here after testnet deployment.)_
 
+## Deployment status (day 1, 2026-10-21)
+
+Contract and tests are complete; the deploy script is verified end-to-end
+against a local Hardhat network. Testnet deployment is pending two things:
+
+1. **Funds.** Throwaway testnet wallets (public addresses only; keys live in
+   a local, gitignored `.env` and are never committed):
+   - Deployer: `0xAA966583E057407EFe716602205F07d8BcCA9248`
+   - Oracle: `0x392595bb13Bb4E5696709bd2d6ED6d59AbC94b17`
+   Both hold 0 POL. Every public Amoy faucet requires either a CAPTCHA in a
+   live browser or account/eligibility checks, so funding needs one manual
+   browser claim (e.g. faucet.polygon.technology or the Alchemy Amoy
+   faucet) sending test POL to the deployer address.
+2. **RPC access.** The build VM cannot reach public Amoy RPC endpoints
+   (all return empty responses), so the deploy must run from an environment
+   with working RPC egress: `npx hardhat run scripts/deploy.js --network amoy`
+   once the deployer is funded.
+
 ## Development
 
 ```bash

@@ -12,7 +12,7 @@ module.exports = {
   networks: {
     hardhat: {},
     amoy: {
-      url: AMOY_RPC_URL || "https://rpc-amoy.polygon.technology",
+      url: AMOY_RPC_URL || "https://polygon-amoy-bor-rpc.publicnode.com",
       chainId: 80002,
       accounts: DEPLOYER_PRIVATE_KEY ? [DEPLOYER_PRIVATE_KEY] : [],
     },

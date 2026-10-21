@@ -47,26 +47,36 @@ PlotLock supports evidence review; it does not certify carbon credits.
 
 ## How to replay on testnet
 
-_(Placeholder — contract address, explorer links, and the step-by-step
-replay of the four demo plots land here after testnet deployment.)_
+The contract is live on Polygon Amoy (see Deployment status below). Open
+the contract on the explorer:
+https://amoy.polygonscan.com/address/0x0a9B8e718D2cF31cc2ED454045C0151C81A2E2E9
+— the step-by-step replay of the four demo plots lands here as the oracle
+and UI come online (days 2–3).
 
-## Deployment status (day 1, 2026-10-21)
+## Deployment status — DEPLOYED to Polygon Amoy (2026-10-21)
 
-Contract and tests are complete; the deploy script is verified end-to-end
-against a local Hardhat network. Testnet deployment is pending two things:
+PlotLock is live on the Polygon Amoy testnet (chainId 80002):
 
-1. **Funds.** Throwaway testnet wallets (public addresses only; keys live in
-   a local, gitignored `.env` and are never committed):
-   - Deployer: `0xAA966583E057407EFe716602205F07d8BcCA9248`
-   - Oracle: `0x392595bb13Bb4E5696709bd2d6ED6d59AbC94b17`
-   Both hold 0 POL. Every public Amoy faucet requires either a CAPTCHA in a
-   live browser or account/eligibility checks, so funding needs one manual
-   browser claim (e.g. faucet.polygon.technology or the Alchemy Amoy
-   faucet) sending test POL to the deployer address.
-2. **RPC access.** The build VM cannot reach public Amoy RPC endpoints
-   (all return empty responses), so the deploy must run from an environment
-   with working RPC egress: `npx hardhat run scripts/deploy.js --network amoy`
-   once the deployer is funded.
+- **Contract:** `0x0a9B8e718D2cF31cc2ED454045C0151C81A2E2E9`
+  https://amoy.polygonscan.com/address/0x0a9B8e718D2cF31cc2ED454045C0151C81A2E2E9
+- **Deploy transaction:** `0x4cd6c0ad8425e4b0ac2e1cf5ebe77d9a0f82f24535cd3be546ef71c269984367`
+  (block 50727423, status success)
+  https://amoy.polygonscan.com/tx/0x4cd6c0ad8425e4b0ac2e1cf5ebe77d9a0f82f24535cd3be546ef71c269984367
+- **Deployer:** `0xAA966583E057407EFe716602205F07d8BcCA9248`
+- **Oracle (verified on-chain via `oracle()`):** `0x392595bb13Bb4E5696709bd2d6ED6d59AbC94b17`
+- **RPC endpoint used:** `https://polygon-amoy-bor-rpc.publicnode.com`
+  (the old `rpc-amoy.polygon.technology` hostname no longer resolves; the
+  config default and `.env.example` now point at the publicnode endpoint)
+- **Date:** 2026-10-21
+
+The deployer was funded with 0.05 test POL from a browser faucet claim
+(tx `0xdc6c0ca0ee94c631b3389652fbe22a1b22815b7316a245e5149193f1f2b9a751`)
+and the deploy ran from a machine with working RPC egress, because the
+build VM's egress proxy holds JSON-RPC POSTs. Wallets are throwaway
+testnet wallets; keys live only in a local, gitignored `.env` and are
+never committed. Contract source verification on PolygonScan is still
+pending a (free) PolygonScan API key in `.env`; the bytecode and all
+state are fully inspectable on the explorer in the meantime.
 
 ## Development
 

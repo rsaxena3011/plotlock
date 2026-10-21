@@ -134,9 +134,13 @@ The deployer was funded with 0.05 test POL from a browser faucet claim
 and the deploy ran from a machine with working RPC egress, because the
 build VM's egress proxy holds JSON-RPC POSTs. Wallets are throwaway
 testnet wallets; keys live only in a local, gitignored `.env` and are
-never committed. Contract source verification on PolygonScan is still
-pending a (free) PolygonScan API key in `.env`; the bytecode and all
-state are fully inspectable on the explorer in the meantime.
+never committed. Contract source is VERIFIED: Sourcify reports an exact
+match (creation and runtime bytecode, match id 56648646, verified
+2026-10-21), and the PolygonScan address page shows "Source Code
+Verified" with the full PlotLock source. (The direct PolygonScan verify
+form is behind a Cloudflare check that rejects this build network, so
+verification was routed through Sourcify, which forwarded it to the
+Etherscan backend.)
 
 ## Development
 
